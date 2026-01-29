@@ -21,8 +21,9 @@ public class PlayerController : MonoBehaviour
         Vector3 temp = transform.position + frameStep;
 
         //constraints on movement
-
-        transform.position = temp;
+        if(temp.x > -9.5f && temp.x < 9.5f) {
+            transform.position = temp;
+        }
         
     }
 }

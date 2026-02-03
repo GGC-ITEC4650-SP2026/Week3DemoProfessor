@@ -1,12 +1,15 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BallController : MonoBehaviour
 {
     
+    //Components Connected to the same gameObject as this one.
     Rigidbody myBod;
     AudioSource myAudio;
 
+    //Components Connected to other gameObjects.
     Text scoreTxt;
 
     private int score;
@@ -18,9 +21,13 @@ public class BallController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //init my components
         myBod = GetComponent<Rigidbody>();
         myAudio = GetComponent<AudioSource>();
+
+        //init other components
         scoreTxt = GameObject.Find("Score").GetComponent<Text>();
+        
         score = 0;
 
         float x = Random.Range(-5f, 5f);
@@ -61,7 +68,16 @@ public class BallController : MonoBehaviour
         GameObject otherGO = other.gameObject;
         print(otherGO.name);
 
-        myAudio.PlayOneShot(exploSound);
+        if(otherGO.name == "MagicSquare")
+        {
+            //clone ball
+            GameObject g = Instantiate(gameObject);
+            g.transform.position = new Vector3(0, 4, 0);
+        }
+        else if(otherGO.name == "Floor") {
+            myAudio.PlayOneShot(exploSound);
+            SceneManager.LoadScene(0);
+        }
 
     }
 }

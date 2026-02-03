@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        Time.timeScale = 0;
     }
 
     // Update is called once per frame
@@ -23,6 +23,12 @@ public class PlayerController : MonoBehaviour
         //constraints on movement
         if(temp.x > -9f && temp.x < 9f) {
             transform.position = temp;
+        }
+
+        // if game is paused and player clicks, then resume game
+        if(Time.timeScale == 0 && Input.GetButtonDown("Fire1"))
+        {
+            Time.timeScale = 1;
         }
         
     }

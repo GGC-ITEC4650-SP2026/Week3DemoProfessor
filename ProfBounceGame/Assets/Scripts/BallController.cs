@@ -10,9 +10,7 @@ public class BallController : MonoBehaviour
     AudioSource myAudio;
 
     //Components Connected to other gameObjects.
-    Text scoreTxt;
-
-    private int score;
+    GameMgr gm;
 
     public int maxJumps;
     public AudioClip bouceSound;
@@ -26,9 +24,7 @@ public class BallController : MonoBehaviour
         myAudio = GetComponent<AudioSource>();
 
         //init other components
-        scoreTxt = GameObject.Find("Score").GetComponent<Text>();
-        
-        score = 0;
+        gm = GameObject.Find("GM").GetComponent<GameMgr>();
 
         float x = Random.Range(-5f, 5f);
         myBod.linearVelocity = new Vector3(x, 5, 0);
@@ -53,9 +49,9 @@ public class BallController : MonoBehaviour
         GameObject otherGO = collision.gameObject;
         print(otherGO.name);
 
-        if(otherGO.name == "Player") {
-            score += 1;
-            scoreTxt.text = "Score: " + score;
+        if(otherGO.name == "Player")
+        {
+            gm.increaseScore(1);
         }
 
         myAudio.PlayOneShot(bouceSound);
@@ -73,10 +69,12 @@ public class BallController : MonoBehaviour
             //clone ball
             GameObject g = Instantiate(gameObject);
             g.transform.position = new Vector3(0, 4, 0);
+            gm.increaseBallCount(1);
         }
         else if(otherGO.name == "Floor") {
             myAudio.PlayOneShot(exploSound);
-            SceneManager.LoadScene(0);
+            gm.increaseBallCount(-1);
+            Destroy(gameObject, 1.5f); //Destroy in 1.5 seconds
         }
 
     }
